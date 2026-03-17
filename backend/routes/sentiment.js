@@ -36,7 +36,7 @@ router.get('/:symbol', async (req, res, next) => {
 
     const articles = await getNewsForSymbols(symbol.toUpperCase(), 10);
     if (articles.length === 0) {
-      return res.json({ symbol, sentiments: [], aggregate: { aggregate: 0, breakdown: {} } });
+      return res.json({ symbol: symbol.toUpperCase(), articles: [], aggregate: { aggregate: 0, breakdown: {} } });
     }
 
     const texts = articles
