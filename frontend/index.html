@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Investment Portfolio Advisor</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-brand">
+      <span class="header-logo">📈</span>
+      <h1 class="header-title">AI Portfolio Advisor</h1>
+    </div>
+    <nav class="header-nav">
+      <button class="nav-btn active" data-tab="portfolio">Portfolio</button>
+      <button class="nav-btn" data-tab="market">Market</button>
+      <button class="nav-btn" data-tab="advisor">AI Advisor</button>
+    </nav>
+    <div class="header-actions">
+      <span class="user-id-label">User:</span>
+      <input type="text" id="userIdInput" class="user-id-input" value="demo-user" placeholder="User ID" />
+    </div>
+  </header>
+
+  <main class="main-container">
+
+    <!-- ===== PORTFOLIO TAB ===== -->
+    <section id="tab-portfolio" class="tab-section active">
+      <div class="section-header">
+        <h2>My Portfolio</h2>
+        <button class="btn btn-primary" id="refreshPortfolioBtn">🔄 Refresh</button>
+      </div>
+
+      <!-- Portfolio Summary Cards -->
+      <div class="stats-grid" id="portfolioStats">
+        <div class="stat-card">
+          <div class="stat-label">Total Value</div>
+          <div class="stat-value" id="totalValue">$—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Invested</div>
+          <div class="stat-value" id="investedValue">$—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Gain / Loss</div>
+          <div class="stat-value" id="gainLoss">$—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Cash Balance</div>
+          <div class="stat-value" id="cashBalance">$—</div>
+        </div>
+      </div>
+
+      <!-- Trade Panel -->
+      <div class="card trade-card">
+        <h3>Trade</h3>
+        <div class="trade-form">
+          <input type="text" id="tradeSymbol" class="form-input" placeholder="Symbol (e.g. AAPL)" />
+          <input type="number" id="tradeShares" class="form-input" placeholder="Shares" min="1" step="0.01" />
+          <input type="number" id="tradePrice" class="form-input" placeholder="Price (optional)" min="0" step="0.01" />
+          <div class="trade-buttons">
+            <button class="btn btn-success" id="buyBtn">Buy</button>
+            <button class="btn btn-danger" id="sellBtn">Sell</button>
+          </div>
+        </div>
+        <div id="tradeMessage" class="trade-message hidden"></div>
+      </div>
+
+      <!-- Holdings Table -->
+      <div class="card">
+        <h3>Holdings</h3>
+        <div class="table-wrapper">
+          <table class="holdings-table" id="holdingsTable">
+            <thead>
+              <tr>
+                <th>Symbol</th>
+                <th>Shares</th>
+                <th>Avg Price</th>
+                <th>Current Price</th>
+                <th>Value</th>
+                <th>Gain/Loss</th>
+                <th>Day Change</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="holdingsBody">
+              <tr>
+                <td colspan="8" class="empty-state">No holdings yet. Start by buying some stocks!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MARKET TAB ===== -->
+    <section id="tab-market" class="tab-section hidden">
+      <div class="section-header">
+        <h2>Market Overview</h2>
+        <button class="btn btn-primary" id="refreshMarketBtn">🔄 Refresh</button>
+      </div>
+
+      <!-- Market Sentiment -->
+      <div class="card" id="marketSentimentCard">
+        <h3>Market Sentiment</h3>
+        <div id="fearGreedDisplay" class="fear-greed-display">Loading...</div>
+      </div>
+
+      <!-- Symbol Lookup -->
+      <div class="card">
+        <h3>Stock Lookup</h3>
+        <div class="lookup-form">
+          <input type="text" id="lookupSymbol" class="form-input" placeholder="Enter symbol (e.g. TSLA)" />
+          <button class="btn btn-primary" id="lookupBtn">Look Up</button>
+        </div>
+        <div id="lookupResult" class="lookup-result hidden"></div>
+      </div>
+
+      <!-- Top Cryptocurrencies -->
+      <div class="card">
+        <h3>Top Cryptocurrencies</h3>
+        <div id="cryptoGrid" class="crypto-grid">Loading...</div>
+      </div>
+
+      <!-- Headlines -->
+      <div class="card">
+        <h3>Financial Headlines</h3>
+        <div id="headlinesList" class="headlines-list">Loading...</div>
+      </div>
+    </section>
+
+    <!-- ===== AI ADVISOR TAB ===== -->
+    <section id="tab-advisor" class="tab-section hidden">
+      <div class="advisor-layout">
+        <div class="chat-panel">
+          <div class="chat-header">
+            <span class="chat-avatar">🤖</span>
+            <div>
+              <h3>AI Advisor</h3>
+              <span class="chat-status">Powered by GPT-4o mini + LangChain</span>
+            </div>
+            <button class="btn btn-sm btn-secondary" id="clearChatBtn">Clear</button>
+          </div>
+
+          <div class="chat-messages" id="chatMessages">
+            <div class="message message-ai">
+              <span class="message-avatar">🤖</span>
+              <div class="message-bubble">
+                Hello! I'm your AI Investment Advisor. I can help you analyze your portfolio,
+                discuss market trends, and provide investment insights. What would you like to know?
+                <br/><br/>
+                <em>Note: This is for educational purposes only. Always consult a licensed financial
+                advisor before making investment decisions.</em>
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-input-area">
+            <div class="quick-prompts" id="quickPrompts">
+              <button class="quick-prompt-btn" data-prompt="Analyze my portfolio and give recommendations">Analyze my portfolio</button>
+              <button class="quick-prompt-btn" data-prompt="What sectors should I diversify into?">Diversification tips</button>
+              <button class="quick-prompt-btn" data-prompt="What are the current market risks I should be aware of?">Market risks</button>
+              <button class="quick-prompt-btn" data-prompt="Explain dollar-cost averaging strategy">DCA strategy</button>
+            </div>
+            <div class="chat-input-row">
+              <textarea
+                id="chatInput"
+                class="chat-input"
+                placeholder="Ask your AI advisor anything about investing..."
+                rows="2"
+              ></textarea>
+              <button class="btn btn-primary btn-send" id="sendBtn">Send ↑</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Side Panel -->
+        <div class="advisor-sidebar">
+          <div class="card">
+            <h3>Sentiment Analysis</h3>
+            <div class="sentiment-form">
+              <input type="text" id="sentimentSymbol" class="form-input" placeholder="Stock symbol (e.g. AAPL)" />
+              <button class="btn btn-primary btn-sm" id="analyzeSentimentBtn">Analyze</button>
+            </div>
+            <div id="sentimentResult" class="sentiment-result hidden"></div>
+          </div>
+
+          <div class="card">
+            <h3>AI Recommendation</h3>
+            <div class="sentiment-form">
+              <input type="text" id="recommendSymbol" class="form-input" placeholder="Stock symbol (e.g. MSFT)" />
+              <button class="btn btn-primary btn-sm" id="getRecommendationBtn">Get Recommendation</button>
+            </div>
+            <div id="recommendationResult" class="recommendation-result hidden"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay hidden">
+    <div class="loading-spinner"></div>
+    <span class="loading-text">Processing...</span>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="ai-advisor.js"></script>
+</body>
+</html>
