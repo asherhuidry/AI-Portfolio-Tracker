@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Investment Portfolio Advisor</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-content">
+      <h1>📈 AI Investment Portfolio Advisor</h1>
+      <p class="tagline">Track, analyse, and optimise your investments with AI</p>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <!-- ── Portfolio Panel ─────────────────────────────────────── -->
+    <section class="panel portfolio-panel" id="portfolio-section">
+      <div class="panel-header">
+        <h2>My Portfolio</h2>
+        <div class="portfolio-summary" id="portfolio-summary">
+          <span class="summary-item">Total Value: <strong id="total-value">$0.00</strong></span>
+          <span class="summary-item gain" id="total-gain-loss"></span>
+        </div>
+      </div>
+
+      <!-- Add Holding Form -->
+      <form class="add-holding-form" id="add-holding-form">
+        <input type="text"  id="holding-symbol"   placeholder="Ticker (e.g. AAPL)" maxlength="10" required />
+        <input type="number" id="holding-shares"   placeholder="Shares" min="0.0001" step="any" required />
+        <input type="number" id="holding-avg-cost" placeholder="Avg Cost ($)" min="0" step="any" required />
+        <button type="submit" class="btn btn-primary">Add</button>
+      </form>
+
+      <!-- Holdings Table -->
+      <div class="table-wrapper">
+        <table class="holdings-table" id="holdings-table">
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Shares</th>
+              <th>Avg Cost</th>
+              <th>Current Price</th>
+              <th>Market Value</th>
+              <th>Gain / Loss</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="holdings-body">
+            <tr class="empty-row">
+              <td colspan="7">No holdings yet. Add one above.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Portfolio Actions -->
+      <div class="portfolio-actions">
+        <button class="btn btn-secondary" id="refresh-btn">🔄 Refresh Prices</button>
+        <button class="btn btn-ai" id="get-recommendations-btn">🤖 Get AI Recommendations</button>
+        <button class="btn btn-secondary" id="get-news-btn">📰 Market News</button>
+      </div>
+
+      <!-- Recommendations Output -->
+      <div class="recommendations-output hidden" id="recommendations-output">
+        <h3>AI Recommendations</h3>
+        <div id="recommendations-content" class="markdown-content"></div>
+      </div>
+
+      <!-- News Feed -->
+      <div class="news-feed hidden" id="news-feed">
+        <h3>Market News</h3>
+        <ul id="news-list" class="news-list"></ul>
+      </div>
+    </section>
+
+    <!-- ── AI Chat Panel ───────────────────────────────────────── -->
+    <section class="panel chat-panel" id="chat-section">
+      <div class="panel-header">
+        <h2>🤖 AI Advisor Chat</h2>
+        <span class="status-dot" id="chat-status" title="Connecting…"></span>
+      </div>
+
+      <div class="chat-messages" id="chat-messages" role="log" aria-live="polite">
+        <div class="message assistant">
+          <span class="avatar">🤖</span>
+          <div class="bubble">
+            Hello! I'm your AI investment advisor. Ask me anything about your portfolio,
+            market trends, or investment strategies.
+            <br /><br />
+            <em>Note: This is for informational purposes only and not professional financial advice.</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <textarea
+          id="chat-input"
+          placeholder="Ask about your portfolio, market trends, or investment strategies…"
+          rows="2"
+          maxlength="1000"
+        ></textarea>
+        <button class="btn btn-primary" id="send-btn">Send</button>
+      </div>
+
+      <div class="chat-suggestions">
+        <span class="suggestion-label">Try:</span>
+        <button class="suggestion-chip" data-text="Analyse my current portfolio diversification">Portfolio diversification</button>
+        <button class="suggestion-chip" data-text="What are the best ETFs for long-term growth?">Best ETFs</button>
+        <button class="suggestion-chip" data-text="How do rising interest rates affect tech stocks?">Interest rates & tech</button>
+        <button class="suggestion-chip" data-text="Explain dollar-cost averaging strategy">Dollar-cost averaging</button>
+      </div>
+
+      <!-- Sentiment Analysis -->
+      <div class="sentiment-section">
+        <h3>Sentiment Analysis</h3>
+        <div class="sentiment-input">
+          <input type="text" id="sentiment-symbol" placeholder="Enter ticker for sentiment (e.g. TSLA)" />
+          <button class="btn btn-secondary" id="analyse-sentiment-btn">Analyse</button>
+        </div>
+        <div id="sentiment-result" class="sentiment-result hidden"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>⚠️ This tool is for informational purposes only. Always consult a qualified financial advisor before making investment decisions.</p>
+  </footer>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="app.js"></script>
+  <script src="ai-advisor.js"></script>
+</body>
+</html>
