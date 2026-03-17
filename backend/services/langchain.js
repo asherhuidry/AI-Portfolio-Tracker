@@ -16,8 +16,8 @@ function getChatModel() {
       throw new Error('OPENAI_API_KEY is not configured');
     }
     chatModel = new ChatOpenAI({
-      openAIApiKey: config.openai.apiKey,
-      modelName: config.openai.model,
+      apiKey: config.openai.apiKey,
+      model: config.openai.model,
       temperature: 0.7,
       maxTokens: 1024,
     });
@@ -47,7 +47,7 @@ async function chat(userMessage, history = []) {
 
     messages.push(new HumanMessage(userMessage));
 
-    const response = await model.call(messages);
+    const response = await model.invoke(messages);
     return response.content;
   } catch (err) {
     logger.error('LangChain chat error:', err);
@@ -85,7 +85,7 @@ Please provide:
       new HumanMessage(prompt),
     ];
 
-    const response = await model.call(messages);
+    const response = await model.invoke(messages);
     return response.content;
   } catch (err) {
     logger.error('LangChain recommendations error:', err);
